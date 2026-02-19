@@ -17,13 +17,6 @@ We appreciate the suggestion to compare against frameworks like `llama.cpp` or `
 *(Note: NPU prefill is significantly faster due to parallel processing of prompts)*
 
 **Conclusion:** Comparing our NPU solution to CPU-based open-source tools heavily skews results due to hardware offloading. The table confirms that `llama.cpp` is insufficient for real-time interactive use (11.3 tok/s) compared to our method (44.8 tok/s). Our comparison against the vendor-optimized NPU baseline (which is already ~2x faster than CPU) provides the most rigorous isolation of our algorithmic contributions.
-
-**Re: Clarity on Masking for CTG**
-We agree that the masking description was brief.
-*   **Mechanism:** We utilize a tree-attention mechanism. The KV-cache is split into a "shared prefix" and "independent branches."
-*   **Implementation:** We construct a 4D attention mask where tokens in specific branches can attend to the shared prefix and their own generated tokens, but are masked (`-inf`) from attending to parallel branches.
-*   **Revision:** We will include the specific mask construction pseudocode and a diagram illustrating the tensor slicing indices in the final version.
-
   
 
 **Re: Clarity on Masking for CTG**
