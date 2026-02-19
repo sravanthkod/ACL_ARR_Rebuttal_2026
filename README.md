@@ -4,12 +4,6 @@
 
 ### **Response to Reviewer SpdU**
 
-Response to Reviewer SpdU
-code
-Markdown
-download
-content_copy
-expand_less
 **Re: Comparison with Open Source Baselines**
 We appreciate the suggestion to compare against frameworks like `llama.cpp` or `MLC-LLM`. To address this, we benchmarked our model against three popular on-device inference engines—`llama.cpp`, `Genie`, and `Nexa ML`—on the Samsung Galaxy S25.
 
