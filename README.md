@@ -5,8 +5,6 @@
 ### **Response to Reviewer SpdU**
 
 
-Here are the updated rebuttal responses for Reviewer SpdU and Reviewer 1reK including the new data for Genie and Nexa ML.
-
 I have also kept the BiTA comparison table for Reviewer xkXK as per your previous instruction.
 
 Response to Reviewer SpdU
