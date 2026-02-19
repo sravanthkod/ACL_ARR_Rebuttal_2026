@@ -4,9 +4,6 @@
 
 ### **Response to Reviewer SpdU**
 
-
-I have also kept the BiTA comparison table for Reviewer xkXK as per your previous instruction.
-
 Response to Reviewer SpdU
 code
 Markdown
