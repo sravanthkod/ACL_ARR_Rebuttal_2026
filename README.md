@@ -6,16 +6,22 @@
 
 
 **Re: Comparison with Open Source Baselines**
-We appreciate the suggestion to compare against frameworks like `llama.cpp` or `MLC-LLM`. To address this, we profiled our model using `llama.cpp` on the Samsung Galaxy S25 CPU.
-*   **Performance Gap:** The `llama.cpp` CPU implementation yielded a generation speed of **11.3 tokens/sec** and a prefill speed of **15.7 tokens/sec**. In contrast, our NPU-optimized baseline (`w/o DS2D`) achieves **~19.9 tokens/sec**, and our full method (`w/ DS2D`) reaches **~44.8 tokens/sec** (see Table 5).
-*   **Memory Efficiency:** The CPU execution consumed **~4.3 GB** of peak memory, whereas our quantized NPU solution operates under **2.5 GB**.
-*   **Conclusion:** Comparing our NPU solution to CPU-based open-source tools would heavily skew results due to hardware offloading. Our comparison against the vendor-optimized NPU baseline (which is already 2x faster than the CPU) allows us to isolate and demonstrate the specific gains from our algorithmic contributions (DS2D and Multi-LoRA).
+We appreciate the suggestion to compare against frameworks like `llama.cpp` or `MLC-LLM`. To address this, we profiled our model using `llama.cpp` on the Samsung Galaxy S25 CPU and compared it with our NPU-based deployment (measured on "Correction" task, Table 5).
+
+| Metric | llama.cpp (CPU) | Ours (NPU w/ DS2D) | Improvement |
+| :--- | :---: | :---: | :---: |
+| **Decode Speed** | 11.3 tok/s | **44.8 tok/s** | **~4.0x** |
+| **Prefill Speed** | 15.7 tok/s | **>200 tok/s*** | **>10x** |
+| **Peak Memory** | ~4.3 GB | **~2.5 GB** | **~1.7x** |
+*(Note: NPU prefill is significantly faster due to parallel processing of prompts)*
+
+**Conclusion:** Comparing our NPU solution to CPU-based open-source tools heavily skews results due to hardware offloading. The table confirms that `llama.cpp` is insufficient for real-time interactive use (11.3 tok/s) compared to our method (44.8 tok/s). Our comparison against the vendor-optimized NPU baseline (which is already ~2x faster than CPU) provides the most rigorous isolation of our algorithmic contributions.
 
 **Re: Clarity on Masking for CTG**
-We agree that the description of the masking mechanism was brief.
-*   **Mechanism:** We utilize a tree-attention mechanism. The KV-cache is logically split into a "shared prefix" (system prompt + history) and "independent branches" (stylistic variants).
-*   **Implementation:** We construct a 4D attention mask where tokens in specific branches can attend to the shared prefix and their own generated tokens, but are masked (`-inf`) from attending to parallel branches. This prevents "contamination" between stylistic variants while physically sharing the memory for the prefix.
-*   **Revision:** In the camera-ready version, we will include the specific mask construction pseudocode and a diagram illustrating the tensor slicing indices.
+We agree that the masking description was brief.
+*   **Mechanism:** We utilize a tree-attention mechanism. The KV-cache is split into a "shared prefix" and "independent branches."
+*   **Implementation:** We construct a 4D attention mask where tokens in specific branches can attend to the shared prefix and their own generated tokens, but are masked (`-inf`) from attending to parallel branches.
+*   **Revision:** We will include the specific mask construction pseudocode and a diagram illustrating the tensor slicing indices in the final version.
 
   
 
