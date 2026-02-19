@@ -12,7 +12,7 @@ We appreciate the suggestion to compare against frameworks like `llama.cpp` or `
 | :--- | :---: | :---: | :---: | :---: |
 | **Decode Speed** | 11.3 | 18.0 | 22.0 | **44.8** |
 | **Speedup (Ours vs X)** | **~4.0x** | **~2.5x** | **~2.0x** | **-** |
-| **Peak Memory** | ~4.3 GB | - | - | **~2.5 GB** |
+| **Peak Memory** | ~4.3 GB | ~3.3 GB | - | **~2.5 GB** |
 
 **Conclusion:**
 While optimized frameworks like `Nexa ML` and `Genie` outperform `llama.cpp` (reaching ~22 tok/s), they still lag significantly behind our solution (~45 tok/s). This confirms that general-purpose engines cannot fully exploit the proprietary NPU stack (Hexagon DSP) to the same extent as our hardware-aware "One-for-All" framework. Furthermore, our solution operates with significantly lower memory footprint (2.5GB vs 4.3GB on CPU), enabled by our mixed-precision QAT (4-bit/8-bit) strategy.
