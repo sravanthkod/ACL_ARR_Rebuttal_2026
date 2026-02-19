@@ -13,6 +13,7 @@ We appreciate the suggestion to compare against frameworks like `llama.cpp` or `
 | **Decode Speed** | 11.3 tok/s | **44.8 tok/s** | **~4.0x** |
 | **Prefill Speed** | 15.7 tok/s | **>200 tok/s*** | **>10x** |
 | **Peak Memory** | ~4.3 GB | **~2.5 GB** | **~1.7x** |
+
 *(Note: NPU prefill is significantly faster due to parallel processing of prompts)*
 
 **Conclusion:** Comparing our NPU solution to CPU-based open-source tools heavily skews results due to hardware offloading. The table confirms that `llama.cpp` is insufficient for real-time interactive use (11.3 tok/s) compared to our method (44.8 tok/s). Our comparison against the vendor-optimized NPU baseline (which is already ~2x faster than CPU) provides the most rigorous isolation of our algorithmic contributions.
