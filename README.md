@@ -8,7 +8,7 @@
 We appreciate the suggestion to compare against frameworks like `llama.cpp` or `MLC-LLM`. To address this, we benchmarked our model against three popular on-device inference engines - [llama.cpp](https://github.com/ggml-org/llama.cpp), [Qualcomm Genie](https://www.qualcomm.com/developer/software/gen-ai-inference-extensions), and [Nexa ML](https://nexa.ai/) - on the Samsung Galaxy S25.
 
 **Table 1: Generation Speed (tokens/sec) & Peak RAM Comparison**
-| Metric | llama.cpp | Genie | Nexa ML | **Ours (NPU w/ DS2D)** |
+| Metric | llama.cpp (CPU) | Genie (NPU) | Nexa ML (NPU) | **Ours (NPU w/ DS2D)** |
 | :--- | :---: | :---: | :---: | :---: |
 | **Decode Speed** | 11.3 | 18.0 | 22.0 | **44.8** |
 | **Speedup (Ours vs X)** | **~4.0x** | **~2.5x** | **~2.0x** | **-** |
