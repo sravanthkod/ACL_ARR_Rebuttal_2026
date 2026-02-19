@@ -6,7 +6,7 @@
 
 
 **Re: Comparison with Open Source Baselines**
-We appreciate the suggestion to compare against frameworks like `llama.cpp` or `MLC-LLM`. To address this, we profiled our model using `llama.cpp` on the Samsung Galaxy S25 CPU and compared it with our NPU-based deployment (measured on "Correction" task, Table 5).
+We appreciate the suggestion to compare against frameworks like `llama.cpp` or `MLC-LLM`. To address this, we profiled our 3B model using `llama.cpp` on the Samsung Galaxy S25 CPU and compared it with our NPU-based deployment (measured on "Correction" task, Table 5).
 
 | Metric | llama.cpp (CPU) | Ours (NPU w/ DS2D) | Improvement |
 | :--- | :---: | :---: | :---: |
