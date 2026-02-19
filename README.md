@@ -83,7 +83,7 @@ We clarify that DS2D does not degrade output quality. It uses a verification ste
 
 
 {
-  "_name_or_path": "/home/sr5/SR-KARINA/ts-common/srllm/1b_multi_lang_simple_sft_10k/",
+  "_name_or_path": "",
   "activation_function": "swiglu",
   "architectures": [
     "LlamaForCausalLM"
