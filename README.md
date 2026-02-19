@@ -57,7 +57,7 @@ DS2D differs from BiTA by eliminating the need for dynamic training or architect
 
 **Re: Baselines and Reproducibility**
 *   **Baselines:** As noted in our response to other reviewers, external baselines (CPU/GPU implementations) are significantly slower than NPU execution. Our chosen baseline (Vendor-Optimized NPU *without* our algorithms) provides the most rigorous isolation of our algorithmic contributions.
-*   **Reproducibility:** We acknowledge the reliance on specific hardware (Galaxy S24/S25). However, our core contributions—the "LoRA-as-Input" graph structure, the DS2D tree logic, and CTG masking—are hardware-agnostic algorithmic patterns. We will release configuration files detailing the branch structures and mask patterns to aid implementation in other edge frameworks (like ExecuTorch).
+*   **Reproducibility:** We acknowledge the reliance on specific hardware (Galaxy S24/S25). However, our core contributions—the "LoRA-as-Input" graph structure, the DS2D tree logic, and CTG masking—are hardware-agnostic algorithmic patterns.
 
 **Re: Paper Length & Content**
 *   **Page Count:** We submitted this as a Long Paper (allowing up to 8 pages) but aimed for conciseness. We will utilize the remaining allowable space in the camera-ready version to expand on the ablation studies (specifically isolating Multi-LoRA overhead vs. DS2D gains) and provide the missing details on quantization setups.
