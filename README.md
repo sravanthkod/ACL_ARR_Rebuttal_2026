@@ -75,3 +75,8 @@ As shown above (benchmarked on Galaxy S25, 3B Model), DS2D achieves consistently
 **Re: DS2D Impact on Quality**
 We clarify that DS2D does not degrade output quality. It uses a verification step where the target model validates the drafted tokens. If the drafted tokens do not match the target model's verification, they are rejected. Therefore, DS2D accelerates generation **losslessly** compared to the base model's greedy/sampling distribution. We will make this explicit in the final text.
 
+
+Init Time: 504147 us
+Prompt Processing Time: 70191 us, Prompt Processing Rate : 470.145752 toks/sec
+Token Generation Time: 343135 us, Token Generation Rate: 26.228821 toks/sec
+
