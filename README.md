@@ -22,34 +22,6 @@ We agree that the masking description was brief.
 *   **Mechanism:** We utilize a tree-attention mechanism. The KV-cache is split into a "shared prefix" and "independent branches."
 *   **Implementation:** We construct a 4D attention mask where tokens in specific branches can attend to the shared prefix and their own generated tokens, but are masked (`-inf`) from attending to parallel branches.
 *   **Revision:** We will include the specific mask construction pseudocode and a diagram illustrating the tensor slicing indices in the final version.
-  
-Response to Reviewer xkXK
-
-**Re: Technical Clarifications (FlashAttention & Winograd)**
-We thank the reviewer for the precise technical corrections.
-*   **FlashAttention:** We agree that FlashAttention primarily optimizes memory access patterns rather than reducing FLOPs. Our usage of "computational overhead" referred to the system latency caused by memory bandwidth bottlenecks. We will correct this in the final text.
-*   **Linear-to-Conv:** We acknowledge that Winograd optimization typically applies to 3x3 convolutions. For 1x1 convolutions, the speedup we observed stems from the specific NPU architecture (Hexagon DSP), which has dedicated hardware paths and superior cache utilization for `Conv2d` kernels compared to generic `Linear` kernels. We will revise the text to attribute gains to NPU-specific kernel utilization.
-
-**Re: Novelty of "LoRA-as-Input"**
-The reviewer notes that swapping weights is standard. While true for server-side frameworks (PyTorch), it is a major challenge in **embedded inference** (e.g., QNN, TFLite).
-*   **The Constraint:** Mobile inference engines compile models into **immutable, static graphs** for performance. "Swapping" adapters typically requires recompiling the graph (taking minutes) or loading a new model (doubling memory).
-*   **The Innovation:** We architected the graph to accept weights as **dynamic input tensors** rather than fixed constants. This allows instantaneous task switching within a *single* frozen graph without recompilation or memory spikes.
-
-**Re: Relevance of DS2D/CTG to Multi-LoRA**
-These components are not orthogonal but are required to make the "One-for-All" system viable. The Multi-LoRA architecture introduces system overhead. DS2D and CTG are the necessary "accelerators" that recover the latency budget, allowing the complex multi-adapter system to run at real-time interactive speeds (44+ tok/sec vs 11-22 tok/sec on other engines).
-
-**Re: DS2D vs. BiTA**
-The key distinction is **Dynamic vs. Fixed Branching**. While BiTA uses a fixed tree structure for all inputs, DS2D dynamically optimizes the branch configuration (depth/width) specific to the active **Use Case**. Since different LoRA tasks have different acceptance rates, DS2D outperforms BiTA by tailoring the speculation tree to the specific task difficulty.
-
-**Table: Gauss L 3B Model Generation speed (toks/sec) on Samsung GS25 - BiTA vs DS2D**
-| Task / Use Case | BiTA | **DS2D (Ours)** | **Improvement** |
-| :--- | :---: | :---: | :---: |
-| **Correction** | 45.0 | **49.6** | **+10.2%** |
-| **Composer** | 37.3 | **40.4** | **+8.3%** |
-| **Style** | 42.0 | **45.0** | **+7.1%** |
-| **Summarization** | 36.9 | **42.0** | **+13.8%** |
-
-As shown above, DS2D achieves consistently higher throughput by adapting to the task entropy, whereas BiTA's fixed structure is suboptimal for harder tasks like Summarization.
 
 ***
 
