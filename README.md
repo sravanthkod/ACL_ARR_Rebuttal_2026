@@ -80,3 +80,41 @@ Our solution is **~2x faster** than the best open-source baseline (Nexa ML) and 
 
 **Re: DS2D Impact on Quality**
 We clarify that DS2D does not degrade output quality. It uses a verification step where the target model validates drafted tokens. If tokens do not match the target model's verification, they are rejected. Therefore, DS2D accelerates generation **losslessly** compared to the base model's distribution.
+
+
+{
+  "_name_or_path": "/home/sr5/SR-KARINA/ts-common/srllm/1b_multi_lang_simple_sft_10k/",
+  "activation_function": "swiglu",
+  "architectures": [
+    "LlamaForCausalLM"
+  ],
+  "attention_bias": false,
+  "attention_dropout": 0.0,
+  "bos_token_id": 13,
+  "eos_token_id": 13,
+  "hidden_act": "silu",
+  "hidden_size": 1440,
+  "initializer_range": 0.02,
+  "intermediate_size": 3840,
+  "max_position_embeddings": 4096,
+  "model_type": "llama",
+  "num_attention_heads": 18,
+  "num_hidden_layers": 28,
+  "num_key_value_heads": 18,
+  "pad_token_id": 0,
+  "pretraining_tp": 1,
+  "rms_norm_eps": 1e-06,
+  "rope_scaling": null,
+  "rope_theta": 10000.0,
+  "tie_word_embeddings": false,
+  "torch_dtype": "float32",
+  "transformers_version": "4.33.2",
+  "use_cache": true,
+  "vocab_size": 96000
+}
+
+
+Lora:
+Alpha = 128
+Rank = 32
+
