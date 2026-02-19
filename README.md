@@ -59,3 +59,29 @@ DS2D differs from BiTA by eliminating the need for dynamic training or architect
 We clarify that DS2D does not degrade output quality. It uses a verification step where the target model validates the drafted tokens. If the drafted tokens do not match the target model's verification, they are rejected. Therefore, DS2D accelerates generation **losslessly** compared to the base model's greedy/sampling distribution. We will make this explicit in the final text.
 
 
+========== TIMING STATISTICS ==========
+PREFILL MODE:
+  Time: 46772.5 ms
+  Tokens: 735
+  Time per token: 63.6361 ms/token
+  Tokens per second: 15.7144 tokens/s
+=====================================
+
+========== GENERATION STATISTICS ==========
+Total steps: 99
+Total time: 8759.88 ms
+Average time per step: 88.4836 ms
+Min time per step: 87.7295 ms
+Max time per step: 93.1342 ms
+Tokens per second: 11.3015 tokens/s
+=========================================
+
+========== OVERALL STATISTICS ==========
+Model loading: 426.436 ms
+Prefill: 46772.5 ms
+Generation: 8759.88 ms
+Total inference time: 55958.8 ms
+==========================================
+New PEAK : 4343467 (DMA:, PSS:4343467)
+
+
