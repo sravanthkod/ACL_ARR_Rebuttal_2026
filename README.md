@@ -33,21 +33,19 @@ We agree that the description of the masking mechanism was brief in the main tex
 
 **Re: Technical Clarifications (FlashAttention & Winograd)**
 We thank the reviewer for the precise technical corrections.
-*   **FlashAttention:** We agree that FlashAttention primarily optimizes memory access patterns rather than reducing FLOPs. Our usage of "computational overhead" referred to the system latency caused by memory I/O bottlenecks. We will correct this to "memory bandwidth overhead" in the final text.
-*   **Linear-to-Conv:** We acknowledge that Winograd optimization typically applies to 3x3 convolutions. For 1x1 convolutions, the speedup we observed stems from the specific NPU architecture (Hexagon DSP), which has dedicated hardware paths and superior cache utilization for `Conv2d` kernels compared to generic `Linear` kernels. We will revise the text to attribute gains to NPU-specific kernel utilization rather than Winograd algorithms.
+*   **FlashAttention:** We agree that FlashAttention primarily optimizes memory access patterns rather than reducing FLOPs. Our usage of "computational overhead" referred to the system latency caused by memory bandwidth bottlenecks. We will correct this in the final text.
+*   **Linear-to-Conv:** We acknowledge that Winograd optimization typically applies to 3x3 convolutions. For 1x1 convolutions, the speedup we observed stems from the specific NPU architecture (Hexagon DSP), which has dedicated hardware paths and superior cache utilization for `Conv2d` kernels compared to generic `Linear` kernels. We will revise the text to attribute gains to NPU-specific kernel utilization rather than Winograd.
 
 **Re: Novelty of "LoRA-as-Input"**
-The reviewer notes that swapping weights is standard. While true for dynamic server-side frameworks (e.g., PyTorch), it is a major challenge in **embedded inference engines** (e.g., QNN, TFLite).
+The reviewer notes that swapping weights is standard. While true for dynamic server-side frameworks (e.g., PyTorch), it is a major challenge in **embedded inference** (e.g., QNN, TFLite).
 *   **The Constraint:** Mobile inference engines compile models into **immutable, static graphs** for performance. "Swapping" adapters typically requires recompiling the graph (taking minutes) or loading a new model (doubling memory).
-*   **The Innovation:** We architected the graph to accept weights as **dynamic input tensors** rather than fixed constants. This allows instantaneous task switching within a *single* frozen graph without recompilation or memory spikes—a critical enabler for mobile interaction that is not natively supported by default mobile inference stacks.
+*   **The Innovation:** We architected the graph to accept weights as **dynamic input tensors** rather than fixed constants. This allows instantaneous task switching within a *single* frozen graph without recompilation or memory spikes.
 
 **Re: Relevance of DS2D/CTG to Multi-LoRA**
-These components are not orthogonal but are required to make the "One-for-All" system viable.
-*   **System Latency:** The Multi-LoRA architecture introduces system overhead (memory bandwidth pressure from loading adapter inputs).
-*   **Synergy:** DS2D and CTG are the necessary "accelerators" that recover the latency budget, allowing the complex multi-adapter system to run at real-time interactive speeds (40+ tok/sec), which would otherwise be too slow for commercial deployment.
+These components are not orthogonal but are required to make the "One-for-All" system viable. The Multi-LoRA architecture introduces system overhead (memory bandwidth pressure). DS2D and CTG are the necessary "accelerators" that recover the latency budget, allowing the complex multi-adapter system to run at real-time interactive speeds (44+ tok/sec vs 11.3 tok/sec on CPU).
 
 **Re: DS2D vs. BiTA**
-DS2D differs from BiTA by eliminating the need for dynamic training or architecture changes. DS2D uses **static forecast embeddings** derived from the frozen model itself, specifically optimized for the "no-draft-model" memory constraint of edge devices where RAM is at a premium.
+The key distinction lies in **use-case adaptive branching**. While BiTA typically employs a fixed tree structure for all inputs, DS2D dynamically adjusts the tree configuration (branch depth and width) specific to the active **Use Case** (e.g., Summarization vs. Correction). Since different tasks have different token acceptance rates, DS2D selects the optimal branch layout for the active LoRA, maximizing the speedup for that specific task distribution—a flexibility that BiTA lacks.
 
 
 ***
