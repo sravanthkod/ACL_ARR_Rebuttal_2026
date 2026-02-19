@@ -75,7 +75,7 @@ As noted in our response to other reviewers, we profiled multiple on-device fram
 | Metric | llama.cpp | Genie | Nexa ML | **Ours (NPU w/ DS2D)** |
 | :--- | :---: | :---: | :---: | :---: |
 | **Decode Speed** | 11.3 | 18.0 | 22.0 | **44.8** |
-| **Peak Memory** | ~4.3 GB | - | - | **~2.5 GB** |
+| **Peak Memory** | ~4.3 GB | ~2.6 GB | - | **~2.5 GB** |
 
 Our solution is **~2x faster** than the best open-source baseline (Nexa ML) and **~4x faster** than `llama.cpp`. This validates our choice to compare against the **Vendor-Optimized NPU baseline** (which runs at ~20 tok/s) to rigorously isolate our algorithmic contributions.
 
