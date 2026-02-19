@@ -5,17 +5,17 @@
 ### **Response to Reviewer SpdU**
 
 **Re: Comparison with Open Source Baselines**
-We appreciate the suggestion to compare against frameworks like `llama.cpp` or `MLC-LLM`. To address this, we benchmarked our model against three popular on-device inference engines—`llama.cpp`, `Genie`, and `Nexa ML`—on the Samsung Galaxy S25.
+We appreciate the suggestion to compare against frameworks like `llama.cpp` or `MLC-LLM`. To address this, we benchmarked our model against three popular on-device inference engines—[llama.cpp](https://github.com/ggml-org/llama.cpp), [Qualcomm Genie](https://www.qualcomm.com/developer/software/gen-ai-inference-extensions), and [Nexa ML](https://nexa.ai/)—on the Samsung Galaxy S25.
 
-**Table 1: Generation Speed (tokens/sec) \& Peak RAM Comparison**
-| Metric | llama.cpp (CPU) | Genie (NPU) | Nexa ML (NPU) | **Ours (NPU w/ DS2D)** |
+**Table 1: Generation Speed (tokens/sec) Comparison**
+| Metric | llama.cpp | Genie | Nexa ML | **Ours (NPU w/ DS2D)** |
 | :--- | :---: | :---: | :---: | :---: |
 | **Decode Speed** | 11.3 | 18.0 | 22.0 | **44.8** |
 | **Speedup (Ours vs X)** | **~4.0x** | **~2.5x** | **~2.0x** | **-** |
-| **Peak Memory** | ~4.3 GB | ~3.5 GB | - | **~2.5 GB** |
+| **Peak Memory** | ~4.3 GB | - | - | **~2.5 GB** |
 
 **Conclusion:**
-While optimized frameworks like `Nexa ML` and `Genie` outperform `llama.cpp` (reaching ~22 tok/s), they still lag significantly behind our solution (~45 tok/s). This confirms that general-purpose engines cannot fully exploit the proprietary NPU stack (Hexagon DSP) to the same extent as our hardware-aware "One-for-All" framework. Furthermore, our solution operates with significantly lower memory footprint (2.5GB vs 4.3GB on CPU), which is critical for multi-task availability.
+While optimized frameworks like `Nexa ML` and `Genie` outperform `llama.cpp` (reaching ~22 tok/s), they still lag significantly behind our solution (~45 tok/s). This confirms that general-purpose engines cannot fully exploit the proprietary NPU stack (Hexagon DSP) to the same extent as our hardware-aware "One-for-All" framework. Furthermore, our solution operates with significantly lower memory footprint (2.5GB vs 4.3GB on CPU), enabled by our mixed-precision QAT (4-bit/8-bit) strategy.
 
 **Re: Clarity on Masking for CTG**
 We agree that the masking description was brief.
@@ -68,7 +68,7 @@ We appreciate the request for greater transparency. We will add the following sp
 *   **Quantization:** We employed Quantization-Aware Training (QAT) with mixed precision (Weights: 4-bit, Activations: 8-bit) to maximize accuracy while fitting the NPU memory constraints.
 
 **Re: Baselines**
-As noted in our response to other reviewers, we profiled multiple on-device frameworks (`llama.cpp`, `Genie`, `Nexa ML`) on the Galaxy S25 CPU/GPU.
+As noted in our response to other reviewers, we profiled multiple on-device frameworks on the Galaxy S25 CPU/GPU: [llama.cpp](https://github.com/ggml-org/llama.cpp), [Qualcomm Genie](https://www.qualcomm.com/developer/software/gen-ai-inference-extensions), and [Nexa ML](https://nexa.ai/).
 
 **Table 1: Generation Speed (tokens/sec) Comparison**
 | Metric | llama.cpp | Genie | Nexa ML | **Ours (NPU w/ DS2D)** |
