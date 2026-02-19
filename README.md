@@ -22,12 +22,9 @@ We agree that the masking description was brief.
 *   **Mechanism:** We utilize a tree-attention mechanism. The KV-cache is split into a "shared prefix" and "independent branches."
 *   **Implementation:** We construct a 4D attention mask where tokens in specific branches can attend to the shared prefix and their own generated tokens, but are masked (`-inf`) from attending to parallel branches.
 *   **Revision:** We will include the specific mask construction pseudocode and a diagram illustrating the tensor slicing indices in the final version.
+  
 Response to Reviewer xkXK
-code
-Markdown
-download
-content_copy
-expand_less
+
 **Re: Technical Clarifications (FlashAttention & Winograd)**
 We thank the reviewer for the precise technical corrections.
 *   **FlashAttention:** We agree that FlashAttention primarily optimizes memory access patterns rather than reducing FLOPs. Our usage of "computational overhead" referred to the system latency caused by memory bandwidth bottlenecks. We will correct this in the final text.
@@ -53,32 +50,6 @@ The key distinction is **Dynamic vs. Fixed Branching**. While BiTA uses a fixed 
 | **Summarization** | 36.9 | **42.0** | **+13.8%** |
 
 As shown above, DS2D achieves consistently higher throughput by adapting to the task entropy, whereas BiTA's fixed structure is suboptimal for harder tasks like Summarization.
-Response to Reviewer 1reK
-code
-Markdown
-download
-content_copy
-expand_less
-**Re: Baselines and Reproducibility**
-*   **Baselines:** As noted in our response to Reviewer SpdU, we profiled multiple on-device frameworks (`llama.cpp`, `Genie`, `Nexa ML`) on the Galaxy S25 CPU/GPU.
-
-**Table 1: Generation Speed (tokens/sec) Comparison**
-| Metric | llama.cpp | Genie | Nexa ML | **Ours (NPU w/ DS2D)** |
-| :--- | :---: | :---: | :---: | :---: |
-| **Decode Speed** | 11.3 | 18.0 | 22.0 | **44.8** |
-| **Peak Memory** | ~4.3 GB | - | - | **~2.5 GB** |
-
-Our solution is **~2x faster** than the best open-source baseline (Nexa ML) and **~4x faster** than `llama.cpp`. This validates our choice to compare against the **Vendor-Optimized NPU baseline** (which runs at ~20 tok/s) to rigorously isolate our algorithmic contributions (DS2D & Multi-LoRA) rather than just hardware gains.
-
-*   **Reproducibility:** We acknowledge the reliance on specific hardware. However, our core contributions—the "LoRA-as-Input" graph structure, the DS2D tree logic, and CTG masking—are hardware-agnostic. We will release configuration files detailing the branch structures and mask patterns to aid implementation in other edge frameworks.
-
-**Re: Paper Length & Content**
-*   **Page Count:** We submitted as a Long Paper but aimed for conciseness. We will utilize the remaining allowable space to expand on ablation studies and quantization details.
-*   **Terminology:** We will standardize "Task" vs. "Use Case" and define all abbreviations (QAT, CTG, etc.) upon first use.
-
-**Re: DS2D Impact on Quality**
-We clarify that DS2D does not degrade output quality. It uses a verification step where the target model validates drafted tokens. If tokens do not match the target model's verification, they are rejected. Therefore, DS2D accelerates generation **losslessly** compared to the base model's distribution.
-
 
 ***
 
@@ -119,18 +90,21 @@ As shown above (benchmarked on Galaxy S25, 3B Model), DS2D achieves consistently
 
 
 **Re: Baselines and Reproducibility**
-*   **Baselines:** As noted in our response to other reviewers, external baselines (CPU/GPU implementations) are significantly slower than NPU execution. Our chosen baseline (Vendor-Optimized NPU *without* our algorithms) provides the most rigorous isolation of our algorithmic contributions.
-*   **Reproducibility:** We acknowledge the reliance on specific hardware (Galaxy S24/S25). However, our core contributions—the "LoRA-as-Input" graph structure, the DS2D tree logic, and CTG masking—are hardware-agnostic algorithmic patterns.
+*   **Baselines:** As noted in our response to Reviewer SpdU, we profiled multiple on-device frameworks (`llama.cpp`, `Genie`, `Nexa ML`) on the Galaxy S25 CPU/GPU.
+
+**Table 1: Generation Speed (tokens/sec) Comparison**
+| Metric | llama.cpp | Genie | Nexa ML | **Ours (NPU w/ DS2D)** |
+| :--- | :---: | :---: | :---: | :---: |
+| **Decode Speed** | 11.3 | 18.0 | 22.0 | **44.8** |
+| **Peak Memory** | ~4.3 GB | - | - | **~2.5 GB** |
+
+Our solution is **~2x faster** than the best open-source baseline (Nexa ML) and **~4x faster** than `llama.cpp`. This validates our choice to compare against the **Vendor-Optimized NPU baseline** (which runs at ~20 tok/s) to rigorously isolate our algorithmic contributions (DS2D & Multi-LoRA) rather than just hardware gains.
+
+*   **Reproducibility:** We acknowledge the reliance on specific hardware. However, our core contributions—the "LoRA-as-Input" graph structure, the DS2D tree logic, and CTG masking—are hardware-agnostic. We will release configuration files detailing the branch structures and mask patterns to aid implementation in other edge frameworks.
 
 **Re: Paper Length & Content**
-*   **Page Count:** We submitted this as a Long Paper (allowing up to 8 pages) but aimed for conciseness. We will utilize the remaining allowable space in the camera-ready version to expand on the ablation studies (specifically isolating Multi-LoRA overhead vs. DS2D gains) and provide the missing details on quantization setups.
-*   **Terminology:** We will standardize the terms "Task" (e.g., Summarization) vs. "Use Case" (e.g., Health Summary) and define all abbreviations (QAT, CTG, etc.) upon first use as suggested.
+*   **Page Count:** We submitted as a Long Paper but aimed for conciseness. We will utilize the remaining allowable space to expand on ablation studies and quantization details.
+*   **Terminology:** We will standardize "Task" vs. "Use Case" and define all abbreviations (QAT, CTG, etc.) upon first use.
 
 **Re: DS2D Impact on Quality**
-We clarify that DS2D does not degrade output quality. It uses a verification step where the target model validates the drafted tokens. If the drafted tokens do not match the target model's verification, they are rejected. Therefore, DS2D accelerates generation **losslessly** compared to the base model's greedy/sampling distribution. We will make this explicit in the final text.
-
-
-Init Time: 504147 us
-Prompt Processing Time: 70191 us, Prompt Processing Rate : 470.145752 toks/sec
-Token Generation Time: 343135 us, Token Generation Rate: 26.228821 toks/sec
-
+We clarify that DS2D does not degrade output quality. It uses a verification step where the target model validates drafted tokens. If tokens do not match the target model's verification, they are rejected. Therefore, DS2D accelerates generation **losslessly** compared to the base model's distribution.
