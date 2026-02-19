@@ -72,7 +72,7 @@ We appreciate the request for greater transparency. We will add the following sp
 As noted in our response to other reviewers, we profiled multiple on-device frameworks on the Galaxy S25 CPU/GPU: [llama.cpp](https://github.com/ggml-org/llama.cpp), [Qualcomm Genie](https://www.qualcomm.com/developer/software/gen-ai-inference-extensions), and [Nexa ML](https://nexa.ai/).
 
 **Table 1: Generation Speed (tokens/sec) Comparison**
-| Metric | llama.cpp | Genie | Nexa ML | **Ours (NPU w/ DS2D)** |
+| Metric | llama.cpp (CPU) | Genie (NPU) | Nexa ML (NPU) | **Ours (NPU w/ DS2D)** |
 | :--- | :---: | :---: | :---: | :---: |
 | **Decode Speed** | 11.3 | 18.0 | 22.0 | **44.8** |
 | **Peak Memory** | ~4.3 GB | ~2.6 GB | - | **~2.5 GB** |
