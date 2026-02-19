@@ -61,8 +61,14 @@ As shown above (benchmarked on Galaxy S25, 3B Model), DS2D achieves consistently
 ### **Response to Reviewer 1reK**
 
 
-**Re: Baselines and Reproducibility**
-*   **Baselines:** As noted in our response to Reviewer SpdU, we profiled multiple on-device frameworks (`llama.cpp`, `Genie`, `Nexa ML`) on the Galaxy S25 CPU/GPU.
+**Re: Model Reproducibility & Details**
+We appreciate the request for greater transparency. We will add the following specifications to the final paper to ensure reproducibility:
+*   **Base Model Architecture:** LLaMA-based structure with `Hidden Size: 1440`, `Heads: 18`, `Layers: 28`, `Vocab: 96000`, and `SwiGLU` activation.
+*   **LoRA Configuration:** We utilized `Rank: 32` and `Alpha: 128` for all task adapters.
+*   **Quantization:** We employed Quantization-Aware Training (QAT) with mixed precision (Weights: 4-bit, Activations: 8-bit) to maximize accuracy while fitting the NPU memory constraints.
+
+**Re: Baselines**
+As noted in our response to other reviewers, we profiled multiple on-device frameworks (`llama.cpp`, `Genie`, `Nexa ML`) on the Galaxy S25 CPU/GPU.
 
 **Table 1: Generation Speed (tokens/sec) Comparison**
 | Metric | llama.cpp | Genie | Nexa ML | **Ours (NPU w/ DS2D)** |
@@ -70,51 +76,12 @@ As shown above (benchmarked on Galaxy S25, 3B Model), DS2D achieves consistently
 | **Decode Speed** | 11.3 | 18.0 | 22.0 | **44.8** |
 | **Peak Memory** | ~4.3 GB | - | - | **~2.5 GB** |
 
-Our solution is **~2x faster** than the best open-source baseline (Nexa ML) and **~4x faster** than `llama.cpp`. This validates our choice to compare against the **Vendor-Optimized NPU baseline** (which runs at ~20 tok/s) to rigorously isolate our algorithmic contributions (DS2D & Multi-LoRA) rather than just hardware gains.
+Our solution is **~2x faster** than the best open-source baseline (Nexa ML) and **~4x faster** than `llama.cpp`. This validates our choice to compare against the **Vendor-Optimized NPU baseline** (which runs at ~20 tok/s) to rigorously isolate our algorithmic contributions.
 
-*   **Reproducibility:** We acknowledge the reliance on specific hardware. However, our core contributions—the "LoRA-as-Input" graph structure, the DS2D tree logic, and CTG masking—are hardware-agnostic. We will release configuration files detailing the branch structures and mask patterns to aid implementation in other edge frameworks.
-
-**Re: Paper Length & Content**
-*   **Page Count:** We submitted as a Long Paper but aimed for conciseness. We will utilize the remaining allowable space to expand on ablation studies and quantization details.
+**Re: Paper Length & Terminology**
+*   **Page Count:** We submitted as a Long Paper but aimed for conciseness. We will utilize the remaining allowable space to expand on the model details provided above.
 *   **Terminology:** We will standardize "Task" vs. "Use Case" and define all abbreviations (QAT, CTG, etc.) upon first use.
 
 **Re: DS2D Impact on Quality**
 We clarify that DS2D does not degrade output quality. It uses a verification step where the target model validates drafted tokens. If tokens do not match the target model's verification, they are rejected. Therefore, DS2D accelerates generation **losslessly** compared to the base model's distribution.
-
-
-{
-  "_name_or_path": "",
-  "activation_function": "swiglu",
-  "architectures": [
-    "LlamaForCausalLM"
-  ],
-  "attention_bias": false,
-  "attention_dropout": 0.0,
-  "bos_token_id": 13,
-  "eos_token_id": 13,
-  "hidden_act": "silu",
-  "hidden_size": 1440,
-  "initializer_range": 0.02,
-  "intermediate_size": 3840,
-  "max_position_embeddings": 4096,
-  "model_type": "llama",
-  "num_attention_heads": 18,
-  "num_hidden_layers": 28,
-  "num_key_value_heads": 18,
-  "pad_token_id": 0,
-  "pretraining_tp": 1,
-  "rms_norm_eps": 1e-06,
-  "rope_scaling": null,
-  "rope_theta": 10000.0,
-  "tie_word_embeddings": false,
-  "torch_dtype": "float32",
-  "transformers_version": "4.33.2",
-  "use_cache": true,
-  "vocab_size": 96000
-}
-
-
-Lora:
-Alpha = 128
-Rank = 32
 
