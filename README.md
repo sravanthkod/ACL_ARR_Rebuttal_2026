@@ -47,7 +47,8 @@ These components are not orthogonal but are required to make the "One-for-All" s
 **Re: DS2D vs. BiTA**
 The key distinction is **Dynamic vs. Fixed Branching**. While BiTA uses a fixed tree structure for all inputs, DS2D dynamically optimizes the branch configuration (depth/width) specific to the active **Use Case**. Since different LoRA tasks have different acceptance rates (entropy), DS2D outperforms BiTA by tailoring the speculation tree to the specific task.
 
-| Gauss L 3B Model Generation speed (toks/sec) on Samsung GS25 - BiTA vs DS2D |  
+| Gauss L 3B Model Generation speed (toks/sec) on Samsung GS25 - BiTA vs DS2D | 
+| Task / Use Case | BiTA | **DS2D (Ours)** | **Improvement** |
 | Task / Use Case | BiTA | **DS2D (Ours)** | **Improvement** |
 | :--- | :---: | :---: | :---: |
 | **Correction** | 45.0 | **49.6** | **+10.2%** |
