@@ -7,7 +7,7 @@
 **Re: Comparison with Open Source Baselines**
 We appreciate the suggestion to compare against frameworks like `llama.cpp` or `MLC-LLM`. To address this, we benchmarked our model against three popular on-device inference engines—`llama.cpp`, `Genie`, and `Nexa ML`—on the Samsung Galaxy S25.
 
-**Table 1: Generation Speed (tokens/sec) Comparison**
+**Table 1: Generation Speed (tokens/sec) \& Peak RAM Comparison**
 | Metric | llama.cpp (CPU) | Genie (NPU) | Nexa ML (NPU) | **Ours (NPU w/ DS2D)** |
 | :--- | :---: | :---: | :---: | :---: |
 | **Decode Speed** | 11.3 | 18.0 | 22.0 | **44.8** |
