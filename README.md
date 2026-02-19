@@ -42,10 +42,19 @@ The reviewer notes that swapping weights is standard. While true for dynamic ser
 *   **The Innovation:** We architected the graph to accept weights as **dynamic input tensors** rather than fixed constants. This allows instantaneous task switching within a *single* frozen graph without recompilation or memory spikes.
 
 **Re: Relevance of DS2D/CTG to Multi-LoRA**
-These components are not orthogonal but are required to make the "One-for-All" system viable. The Multi-LoRA architecture introduces system overhead (memory bandwidth pressure). DS2D and CTG are the necessary "accelerators" that recover the latency budget, allowing the complex multi-adapter system to run at real-time interactive speeds (44+ tok/sec vs 11.3 tok/sec on CPU).
+These components are not orthogonal but are required to make the "One-for-All" system viable. The Multi-LoRA architecture introduces system overhead (memory bandwidth pressure). DS2D and CTG are the necessary "accelerators" that recover the latency budget, allowing the complex multi-adapter system to run at real-time interactive speeds.
 
 **Re: DS2D vs. BiTA**
-The key distinction lies in **use-case adaptive branching**. While BiTA typically employs a fixed tree structure for all inputs, DS2D dynamically adjusts the tree configuration (branch depth and width) specific to the active **Use Case** (e.g., Summarization vs. Correction). Since different tasks have different token acceptance rates, DS2D selects the optimal branch layout for the active LoRA, maximizing the speedup for that specific task distribution—a flexibility that BiTA lacks.
+The key distinction is **Dynamic vs. Fixed Branching**. While BiTA uses a fixed tree structure for all inputs, DS2D dynamically optimizes the branch configuration (depth/width) specific to the active **Use Case**. Since different LoRA tasks have different acceptance rates (entropy), DS2D outperforms BiTA by tailoring the speculation tree to the specific task.
+
+| Task / Use Case | BiTA (tok/s) | **DS2D (Ours)** | **Improvement** |
+| :--- | :---: | :---: | :---: |
+| **Correction** | 45.0 | **49.6** | **+10.2%** |
+| **Composer** | 37.3 | **40.4** | **+8.3%** |
+| **Style** | 42.0 | **45.0** | **+7.1%** |
+| **Summarization** | 36.9 | **42.0** | **+13.8%** |
+
+As shown above (benchmarked on Galaxy S25, 3B Model), DS2D achieves consistently higher throughput by adapting to the task difficulty, whereas BiTA's fixed structure is suboptimal for harder tasks like Summarization.
 
 
 ***
@@ -64,7 +73,3 @@ The key distinction lies in **use-case adaptive branching**. While BiTA typicall
 **Re: DS2D Impact on Quality**
 We clarify that DS2D does not degrade output quality. It uses a verification step where the target model validates the drafted tokens. If the drafted tokens do not match the target model's verification, they are rejected. Therefore, DS2D accelerates generation **losslessly** compared to the base model's greedy/sampling distribution. We will make this explicit in the final text.
 
-Gauss L 3B Model Generation speed (toks/sec) on Samsung GS25 - BiTA vs DS2D				
-Method/Usecase	Correction	Composer	Style	Summarization
-BiTA	45	37.3	42	36.9
-DS2D (ours)	49.6	40.35	45	42
