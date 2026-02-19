@@ -62,10 +62,11 @@ As shown above (benchmarked on Galaxy S25, 3B Model), DS2D achieves consistently
 
 
 **Re: Model Reproducibility & Details**
-We appreciate the request for greater transparency. We will add the following specifications to the final paper to ensure reproducibility:
-*   **Base Model Architecture:** LLaMA-based structure with `Hidden Size: 1440`, `Heads: 18`, `Layers: 28`, `Vocab: 96000`, and `SwiGLU` activation.
-*   **LoRA Configuration:** We utilized `Rank: 32` and `Alpha: 128` for all task adapters.
-*   **Quantization:** We employed Quantization-Aware Training (QAT) with mixed precision (Weights: 4-bit, Activations: 8-bit) to maximize accuracy while fitting the NPU memory constraints.
+We appreciate the request for greater transparency. We will add the following specifications to the final paper to ensure reproducibility for both model sizes deployed:
+
+*   **1B Model:** LLaMA structure, `H: 1440`, `Heads: 18`, `Layers: 28`, `Vocab: 96k`, `SwiGLU` activation.
+*   **3B Model:** LLaMA structure, `H: 3072`, `Heads: 24` (GQA with 4 KV heads), `Layers: 30`, `Vocab: 105.9k`, `Intermed: 8192`.
+*   **LoRA & Quantization:** We utilized `Rank: 32` / `Alpha: 128` for adapters and employed Quantization-Aware Training (QAT) with mixed precision (Weights: 4-bit, Activations: 8-bit) to fit NPU memory constraints.
 
 **Re: Baselines**
 As noted in our response to other reviewers, we profiled multiple on-device frameworks on the Galaxy S25 CPU/GPU: [llama.cpp](https://github.com/ggml-org/llama.cpp), [Qualcomm Genie](https://www.qualcomm.com/developer/software/gen-ai-inference-extensions), and [Nexa ML](https://nexa.ai/).
@@ -84,37 +85,3 @@ Our solution is **~2x faster** than the best open-source baseline (Nexa ML) and 
 
 **Re: DS2D Impact on Quality**
 We clarify that DS2D does not degrade output quality. It uses a verification step where the target model validates drafted tokens. If tokens do not match the target model's verification, they are rejected. Therefore, DS2D accelerates generation **losslessly** compared to the base model's distribution.
-
-
-{
-  "_name_or_path": "/group-volume/shared/models/llm3b_v0.6",
-  "activation_function": "silu",
-  "architectures": [
-    "LlamaForCausalLM"
-  ],
-  "attention_bias": false,
-  "attention_dropout": 0.0,
-  "bos_token_id": 1,
-  "eos_token_id": 37,
-  "head_dim": 128,
-  "hidden_act": "silu",
-  "hidden_size": 3072,
-  "initializer_range": 0.02,
-  "intermediate_size": 8192,
-  "max_position_embeddings": 8192,
-  "mlp_bias": false,
-  "model_type": "llama",
-  "num_attention_heads": 24,
-  "num_hidden_layers": 30,
-  "num_key_value_heads": 4,
-  "pad_token_id": 0,
-  "pretraining_tp": 1,
-  "rms_norm_eps": 1e-05,
-  "rope_scaling": null,
-  "rope_theta": 500000.0,
-  "tie_word_embeddings": false,
-  "torch_dtype": "float32",
-  "transformers_version": "4.45.2",
-  "use_cache": true,
-  "vocab_size": 105900
-}
