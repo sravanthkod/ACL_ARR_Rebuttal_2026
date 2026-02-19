@@ -6,10 +6,18 @@
 
 
 **Re: Comparison with Open Source Baselines**
-We appreciate the suggestion to compare against frameworks like `llama.cpp` or `MLC-LLM`.
-*   **Hardware Disparity:** Current open-source frameworks on these mobile platforms typically utilize the CPU or GPU. In contrast, our solution specifically targets the **NPU (Neural Processing Unit)** via the proprietary Qualcomm AI Stack to maximize energy efficiency and offload the main processor.
-*   **Performance Gap:** Running `llama.cpp` on the Galaxy S24 CPU typically yields significantly lower token throughput compared to NPU execution. Our NPU-optimized baseline (`w/o DS2D`) already achieves ~20 tokens/sec, and our full method (`w/ DS2D`) reaches ~40+ tokens/sec. Comparing our NPU solution to CPU-based open-source tools would heavily skew results due to hardware offloading rather than our algorithmic contributions.
-*   **Baseline Validity:** To rigorously isolate the effectiveness of our proposed methods (DS2D, Multi-LoRA-as-Input), we compared against the strongest possible baseline: the vendor-optimized NPU implementation *without* our specific algorithms. This ensures the reported gains are strictly algorithmic.
+We appreciate the suggestion to compare against frameworks like `llama.cpp` or `MLC-LLM`. To address this, we profiled our model using `llama.cpp` on the Samsung Galaxy S25 CPU.
+*   **Performance Gap:** The `llama.cpp` CPU implementation yielded a generation speed of **11.3 tokens/sec** and a prefill speed of **15.7 tokens/sec**. In contrast, our NPU-optimized baseline (`w/o DS2D`) achieves **~19.9 tokens/sec**, and our full method (`w/ DS2D`) reaches **~44.8 tokens/sec** (see Table 5).
+*   **Memory Efficiency:** The CPU execution consumed **~4.3 GB** of peak memory, whereas our quantized NPU solution operates under **2.5 GB**.
+*   **Conclusion:** Comparing our NPU solution to CPU-based open-source tools would heavily skew results due to hardware offloading. Our comparison against the vendor-optimized NPU baseline (which is already 2x faster than the CPU) allows us to isolate and demonstrate the specific gains from our algorithmic contributions (DS2D and Multi-LoRA).
+
+**Re: Clarity on Masking for CTG**
+We agree that the description of the masking mechanism was brief.
+*   **Mechanism:** We utilize a tree-attention mechanism. The KV-cache is logically split into a "shared prefix" (system prompt + history) and "independent branches" (stylistic variants).
+*   **Implementation:** We construct a 4D attention mask where tokens in specific branches can attend to the shared prefix and their own generated tokens, but are masked (`-inf`) from attending to parallel branches. This prevents "contamination" between stylistic variants while physically sharing the memory for the prefix.
+*   **Revision:** In the camera-ready version, we will include the specific mask construction pseudocode and a diagram illustrating the tensor slicing indices.
+
+  
 
 **Re: Clarity on Masking for CTG**
 We agree that the description of the masking mechanism was brief in the main text.
@@ -57,31 +65,5 @@ DS2D differs from BiTA by eliminating the need for dynamic training or architect
 
 **Re: DS2D Impact on Quality**
 We clarify that DS2D does not degrade output quality. It uses a verification step where the target model validates the drafted tokens. If the drafted tokens do not match the target model's verification, they are rejected. Therefore, DS2D accelerates generation **losslessly** compared to the base model's greedy/sampling distribution. We will make this explicit in the final text.
-
-
-========== TIMING STATISTICS ==========
-PREFILL MODE:
-  Time: 46772.5 ms
-  Tokens: 735
-  Time per token: 63.6361 ms/token
-  Tokens per second: 15.7144 tokens/s
-=====================================
-
-========== GENERATION STATISTICS ==========
-Total steps: 99
-Total time: 8759.88 ms
-Average time per step: 88.4836 ms
-Min time per step: 87.7295 ms
-Max time per step: 93.1342 ms
-Tokens per second: 11.3015 tokens/s
-=========================================
-
-========== OVERALL STATISTICS ==========
-Model loading: 426.436 ms
-Prefill: 46772.5 ms
-Generation: 8759.88 ms
-Total inference time: 55958.8 ms
-==========================================
-New PEAK : 4343467 (DMA:, PSS:4343467)
 
 
