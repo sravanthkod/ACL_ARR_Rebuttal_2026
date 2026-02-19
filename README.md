@@ -1,4 +1,4 @@
-## ACL ARR 2026 Rebuttal
+<img width="467" height="108" alt="image" src="https://github.com/user-attachments/assets/f6f71171-4541-428e-a26d-fffb875fd841" /><img width="467" height="108" alt="image" src="https://github.com/user-attachments/assets/f6f71171-4541-428e-a26d-fffb875fd841" />## ACL ARR 2026 Rebuttal
 
 ***
 
@@ -64,4 +64,7 @@ The key distinction lies in **use-case adaptive branching**. While BiTA typicall
 **Re: DS2D Impact on Quality**
 We clarify that DS2D does not degrade output quality. It uses a verification step where the target model validates the drafted tokens. If the drafted tokens do not match the target model's verification, they are rejected. Therefore, DS2D accelerates generation **losslessly** compared to the base model's greedy/sampling distribution. We will make this explicit in the final text.
 
-
+Gauss L 3B Model Generation speed (toks/sec) on Samsung GS25 - BiTA vs DS2D				
+Method/Usecase	Correction	Composer	Style	Summarization
+BiTA	45	37.3	42	36.9
+DS2D (ours)	49.6	40.35	45	42
