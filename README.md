@@ -1,4 +1,4 @@
-<img width="467" height="108" alt="image" src="https://github.com/user-attachments/assets/f6f71171-4541-428e-a26d-fffb875fd841" /><img width="467" height="108" alt="image" src="https://github.com/user-attachments/assets/f6f71171-4541-428e-a26d-fffb875fd841" />## ACL ARR 2026 Rebuttal
+## ACL ARR 2026 Rebuttal
 
 ***
 
